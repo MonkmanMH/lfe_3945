@@ -1,0 +1,63 @@
+---
+title: "Labour force estimates, 1939 - 1945"
+output: html_notebook
+---
+
+```{r setup}
+
+library(tidyverse)
+
+```
+
+
+Read data
+
+```{r}
+
+lfe_3945 <- read_csv("lfe_3945.csv", col_types = cols(
+  status = col_factor()))
+
+# as published
+lfe_3945 %>% 
+  pivot_wider(values_from = `count.000s`, names_from = c(year, sex))
+
+```
+
+
+
+## plotting
+
+
+```{r ch_facet1}
+
+ggplot(lfe_3945, aes(x = year, y = count.000s)) +
+  geom_line() +
+  geom_point() +
+  facet_grid(status ~ sex)
+
+```
+
+
+put grid the other direction -- so the Y axis is across sex, not lf status
+
+```{r ch_facet2}
+
+ch_facet2 <-
+ggplot(lfe_3945, aes(x = year, y = count.000s)) +
+  geom_line() +
+  geom_point() +
+  facet_grid(sex ~ status)
+  
+ch_facet2
+
+```
+
+
+```{r ch_format}
+
+ch_facet2 +
+  scale_x_continuous(breaks = c(1939, 1941, 1943, 1945)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+
+```
+
